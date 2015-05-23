@@ -6,16 +6,19 @@ Template.postEdit.events({
 
 		var postProperties = {
 			url: $(e.target).find('[name=url]').val(),
-			title: $(e.target).find('[name=title]').val() 
+			title: $(e.target).find('[name=title]').val(),
+			id: currentPostId 
 		}
 
-		Posts.update(currentPostId, {$set: postProperties}, function(error){
-			if(error){
-				// Display error to user.
-				alert(error.reason);
-			} else {
-				Router.go('postPage', {_id: currentPostId});
-			}
+		Meteor.call('postUpdate', postProperties, function(error, result){
+			// Display error and abort.
+			if (error)
+				return alert(error.reason);
+
+			if(result.postExists)
+				return alert('This link already exists.');
+
+			Router.go('postPage', {_id: currentPostId});
 		});
 	},
 
