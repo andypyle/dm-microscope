@@ -11,6 +11,11 @@ Template.postSubmit.events({
 			// Display error to user and abort.
 			if (error)
 				return alert(error.reason);
+
+			// Show this result, but route anyway.
+			if(result.postExists)
+				alert('This link has already been posted.');
+			
 			Router.go('postPage', {_id: result._id});
 		});
 	}
